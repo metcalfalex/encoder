@@ -18,9 +18,12 @@ import codecs
 def open_codecs(encoding_name):
 	with codecs.open(file_in, "r", encoding=encoding_name) as fi:
 		fi_csv = csv.reader(fi, delimiter=delimiter_in, quotechar=quotechar_in)
+		header_line = next(fi_csv)
 		with open(file_out,'w') as fo:
 			fo_csv = csv.writer(fo,delimiter=delimiter_out, quotechar=quotechar_out)
-			fo_csv.writerows(fi_csv)
+			for row in fi_csv:
+				if fi_csv.line_num % (1/sample_percent)  == 0:
+					fo_csv.writerow(row)
 			print('SUCCESSFUL: '+str(encoding_name)+' codecs.open')
 
 
@@ -28,20 +31,22 @@ def open_codecs(encoding_name):
 # Parameters
 # -----------------------------------------------
 
-# file_in = 'input_100.csv'
+file_in = 'input_100.csv'
 # file_in = './data/ansi.csv'
 # file_in = './data/ascii.csv'
 # file_in = './data/noheader.csv'
 # file_in = './data/sample.csv'
 # file_in = './data/utf-8.csv'
-file_in = './data/utf-16.csv'
-
+# file_in = './data/utf-16.csv'
 
 delimiter_in = ','
 quotechar_in = '"'
 
 delimiter_out = '\t'
 quotechar_out = '"'
+
+sample_percent = 1
+# e.g. 0.1 returns 10 percent of the full document (every 10th row)
 
 file_out = 'output.txt'
 
@@ -60,13 +65,13 @@ file_out = 'output.txt'
 # -----------------------------------------------
 
 try:
-	open_codecs("utf-16")
+	open_codecs("utf-8")
 except:
-	print('UNSUCCESSFUL: utf-16 codecs.open')
+	print('UNSUCCESSFUL: utf-8 codecs.open')
 	try: 
-		open_codecs("utf-8")
+		open_codecs("utf-16")
 	except: 
-		print('UNSUCCESSFUL: utf-8 codecs.open')
+		print('UNSUCCESSFUL: utf-16 codecs.open')
 
 
 
