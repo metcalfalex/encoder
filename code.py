@@ -15,16 +15,35 @@ import codecs
 # Functions
 # -----------------------------------------------
 
-
+def open_codecs(encoding_name):
+	with codecs.open(file_in, "r", encoding=encoding_name) as fi:
+		fi_csv = csv.reader(fi, delimiter=delimiter_in, quotechar=quotechar_in)
+		with open(file_out,'w') as fo:
+			fo_csv = csv.writer(fo,delimiter=delimiter_out, quotechar=quotechar_out)
+			fo_csv.writerows(fi_csv)
+			print('SUCCESSFUL: '+str(encoding_name)+' codecs.open')
 
 
 # -----------------------------------------------
 # Parameters
 # -----------------------------------------------
 
+# file_in = 'input_100.csv'
+# file_in = './data/ansi.csv'
+# file_in = './data/ascii.csv'
+# file_in = './data/noheader.csv'
+# file_in = './data/sample.csv'
+# file_in = './data/utf-8.csv'
+file_in = './data/utf-16.csv'
 
-filepath = 'input_100.csv'
-file_out = 'output.csv'
+
+delimiter_in = ','
+quotechar_in = '"'
+
+delimiter_out = '\t'
+quotechar_out = '"'
+
+file_out = 'output.txt'
 
 # -----------------------------------------------
 # Import
@@ -40,13 +59,16 @@ file_out = 'output.csv'
 # Body
 # -----------------------------------------------
 
+try:
+	open_codecs("utf-16")
+except:
+	print('UNSUCCESSFUL: utf-16 codecs.open')
+	try: 
+		open_codecs("utf-8")
+	except: 
+		print('UNSUCCESSFUL: utf-8 codecs.open')
 
 
-with codecs.open(filepath, "r", encoding="utf-16") as fi:
-	fi_csv = csv.reader(fi, delimiter=",", quotechar='"')
-	with open(file_out,'w') as fo:
-		fo_csv = csv.writer(fo,delimiter=',')
-		fo_csv.writerows(fi_csv)
 
 
 # f = csv.reader(codecs.open(filepath, "r", encoding="utf-16"), delimiter=",", quotechar='"')
