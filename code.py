@@ -10,41 +10,60 @@
 
 import csv
 import codecs
-
+import math
 
 # -----------------------------------------------
 # Functions
 # -----------------------------------------------
 
+
 def open_codecs(encoding_name):
 	with codecs.open(file_in, "r", encoding=encoding_name) as fi:
 		fi_csv = csv.reader(fi, delimiter=delimiter_in, quotechar=quotechar_in)
 		header_line = next(fi_csv)
-		with open(file_out,'w') as fo:
-			fo_csv = csv.writer(fo,delimiter=delimiter_out, quotechar=quotechar_out)
+		if split_file == False:
+			with open('output.txt','w') as fo:
+				fo_csv = csv.writer(fo,delimiter=delimiter_out, quotechar=quotechar_out)
 			fo_csv.writerow(header_line)
 			for row in fi_csv:
-				if fi_csv.line_num % (1/sample_percent)  == 0:
-					fo_csv.writerow(row)
+				fo_csv.writerow(row)
 			print('SUCCESSFUL: '+str(encoding_name)+' codecs.open')
+		else:
+			# count lines
+			with codecs.open(file_in, "r", encoding=encoding_name) as fi_count:
+				for i, l in enumerate(fi_count):
+					pass
+				total_lines = i + 1
+			# calculate number of files required
+			n_files_required = math.floor(total_lines - 1) / split_lines_per_file
+			n_lines_final_file = (total_lines - 1) % split_lines_per_file
+			# loop through files
+			for f in range(n_files_required):
+				with open('output_'+str(f).zfill(3),'w') as fo:
+					fo_csv = csv.writer(fo,delimiter=delimiter_out, quotechar=quotechar_out)
+					fo_csv.writerow(header_line)
+					for row in fi_csv:
+						fo_csv.writerow(row)
+						if 
+
 
 
 # -----------------------------------------------
 # Parameters
 # -----------------------------------------------
 
-file_in = 'input.csv'
+file_in = 'input_100.csv'
 delimiter_in = ','
 quotechar_in = '"'
 
-file_out = 'output.txt'
-delimiter_out = '\t'
+]delimiter_out = '\t'
 quotechar_out = '"'
 
-sample_percent = 1
-# e.g. 0.1 returns 10 percent of the full document (every 10th row)
+split_file = False
+split_lines_per_file = 10
 
-
+# total_lines
+# all lines excluding last line of file
 
 # -----------------------------------------------
 # Body
@@ -52,11 +71,11 @@ sample_percent = 1
 
 try:
 	open_codecs("utf-8")
-except:
-	print('UNSUCCESSFUL: utf-8')
+except Exception as e:
+	print('UNSUCCESSFUL: utf-8\n'+str(e))
 	try: 
 		open_codecs("utf-16")
-	except: 
-		print('UNSUCCESSFUL: utf-16')
+	except Exception as e:
+		print('UNSUCCESSFUL: utf-16\n'+str(e))
 
 
