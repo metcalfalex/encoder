@@ -1,5 +1,6 @@
 # encoder
 convert data file to consistent encoding
+if required, split into subfiles
 
 Default parameters:
 
@@ -9,12 +10,11 @@ delimiter = ','
 quotechar = '"'
 
 output file
-name = 'output.txt'
 delimiter = '\t'
 quotechar = '"'
 
-No sampling
-(all lines used)
+split_file = False
+split_lines_per_file = 10000
 
 Current encodings available:
 * UTF-8
